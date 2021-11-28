@@ -15,7 +15,8 @@ def calcular_posicion(x,y,movimiento):
 def evaluar_paso(x,y, hay_paso, hay_muro):
 
 
-    return
+    return True
+
 laberinto_resuelto= [
     [' ', 'X', 'X', 'X', 'X'], 
     [' ', 'X', ' ', ' ', ' '],
@@ -56,7 +57,7 @@ x=0
 y=0
 
 salir=False
-movimientos=[]
+movimientos=[ ]
 while not salir:
     print("Menu")
     print("1-Abajo")
@@ -64,12 +65,18 @@ while not salir:
     print("3-Izquierda")
     print("4-Derecha")
     
-
-    opcion=int(input("Elige una opcion:"))
+    opcion=int(input("Elige una opcion: "))
     if opcion>=1 or opcion <=4:
         print("posicion actual: ", x,y)
-        x,y=calcular_posicion(x,y,opcion)
-        print("Nueva posicion: ",x,y)
+        x1,y1=calcular_posicion(x,y,opcion)
+        print("Nueva posicion: ",x1,y1)
+        if (x1<0 or x1>4) or (y1<0 or y1>4):
+            print("posicion incorrecta, elija nuevo movimiento")
+            continue
+        else:
+            x=x1
+            y=y1
+
         if opcion==1:
             movimientos.append("abajo")
         if opcion==2:
@@ -78,11 +85,12 @@ while not salir:
             movimientos.append("izquierda")
         if opcion==4:
             movimientos.append("derecha")
+
+        if evaluar_paso(x,y,hay_paso,hay_muro):
+            print("Hay paso")
+        else:
+            print("Hay muro")
     else:
         continue
-
-        if (x>=1 or x<=4) and (y>=1 or y<=4):
-            evaluar_posicion=(x,y)
-        else:
-            continue
+    
         
