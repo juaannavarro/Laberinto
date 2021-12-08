@@ -1,2 +1,2 @@
 # Laberinto
-Mi dirección de github es:
+Mi dirección de github para el repositorio del laberinto es:
