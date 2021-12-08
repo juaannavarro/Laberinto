@@ -1,23 +1,6 @@
-def calcular_posicion(x,y,movimiento):
-    
-    x1=x
-    y1=y
-    if movimiento == 1:
-        x1=x1+1
-    elif movimiento==2:
-        x1=x1-1
-    elif movimiento==3:
-        y1=y1-1
-    elif movimiento==4:
-        y1=y1+1
-    return x1, y1
+import pprint
 
-def evaluar_paso(x,y, hay_paso, hay_muro):
-
-
-    return True
-
-laberinto_resuelto= [
+laberinto_resuelto = [
     [' ', 'X', 'X', 'X', 'X'], 
     [' ', 'X', ' ', ' ', ' '],
     [' ', 'X', ' ', 'X', ' '], 
@@ -25,72 +8,62 @@ laberinto_resuelto= [
     ['X', 'X', 'X', 'X', 'S']
     ]
 
+# Tarea 1
+def creaLaberinto(muro, dimLab):
 
-hay_paso=(' ')
-hay_muro=('X')
-hay_muro = ((0,1), (0,2), (0,3), (0,4), (1,1), (2,1), (2,3), (3,3), (4,0), (4,1), (4,2), (4,3))
-hay_paso = ((0,0), (1,0), (1,2), (1,3), (1,4), (2,0), (2,2), (2,4), (3,0), (3,1), (3,2), (3,4))
-
-import pprint
-laberinto = [
-    ['o', 'D', 'D', 'D', 'D'], 
-    ['D', 'D', 'D', 'D', 'D'],
-    ['D', 'D', 'D', 'D', 'D'], 
-    ['D', 'D', 'D', 'D', 'D'], 
-    ['D', 'D', 'D', 'D', 'S']
-    ]
-jugador1=('o')
-print("tu eres:", jugador1)
-desconocido=('D')
-print("las casillas desconocidas son:", desconocido)
-
-import random
-def tablaLaberinto(lista):
-    laberinto=random.choice(lista)
-    tablaLaberinto=laberinto.get(laberinto)
-    return lista, laberinto
-
-print("tabla del laberinto")
-pprint.pprint(laberinto)
-
-x=0
-y=0
-
-salir=False
-movimientos=[ ]
-while not salir:
-    print("Menu")
-    print("1-Abajo")
-    print("2-Arriba")
-    print("3-Izquierda")
-    print("4-Derecha")
+    laberinto = []
     
-    opcion=int(input("Elige una opcion: "))
-    if opcion>=1 or opcion <=4:
-        print("posicion actual: ", x,y)
-        x1,y1=calcular_posicion(x,y,opcion)
-        print("Nueva posicion: ",x1,y1)
-        if (x1<0 or x1>4) or (y1<0 or y1>4):
-            print("posicion incorrecta, elija nuevo movimiento")
-            continue
-        else:
-            x=x1
-            y=y1
+    for i in range(dimLab):
+        fila = []
 
-        if opcion==1:
-            movimientos.append("abajo")
-        if opcion==2:
-            movimientos.append("arriba")
-        if opcion==3:
-            movimientos.append("izquierda")
-        if opcion==4:
-            movimientos.append("derecha")
+        for j in range(dimLab):
+            if ((i==j) and (i==dimLab-1)):
+                fila.append('S')
+            elif (tuple([i,j]) in muro):
+                fila.append('X')
+            else:    
+                fila.append(' ')
+        laberinto.append(fila)
+    return laberinto
 
-        if evaluar_paso(x,y,hay_paso,hay_muro):
-            print("Hay paso")
-        else:
-            print("Hay muro")
-    else:
-        continue
+#Tarea 2
+def recorreLaberinto(laberinto, numFilCol):
     
+    movimientos = []
+
+    x=y=0
+    salir = False
+
+
+    while not salir:
         
+        if (x+1 < numFilCol) and (laberinto[x+1][y]!='X') and (len(movimientos) == 0 or movimientos[-1]!='Arriba'):
+            movimientos.append('Abajo')
+            x=x+1 
+            print("Avanza Abajo posicion", x,y)
+        elif (y+1 < numFilCol) and (laberinto[x][y+1]!='X') and (len(movimientos) == 0 or movimientos[-1]!='Izquierda'):
+            
+            movimientos.append('Derecha')
+            y=y+1 
+            print("Avanza Derecha posicion ",x,y)
+        elif (y-1>0) and (y-1 < numFilCol) and (laberinto[x][y-1]!='X')and (len(movimientos) == 0 or movimientos[-1]!= 'Derecha'):
+            
+            print("Avanza Izquierda")
+            movimientos.append('Izquierda')
+            y=y-1    
+            print("Avanza Izquierda posicion ",x,y)
+        elif (x-1>0) and (x-1 < numFilCol) and (laberinto[x-1][y]!='X') and (len(movimientos) == 0 or  movimientos[-1]!= 'Abajo'):
+            
+            movimientos.append('Arriba')
+            x=x-1 
+            print("Avanza Arriba posicion", x,y)
+        elif (x==numFilCol-1) and (y==numFilCol-1) and (laberinto[x][y]=='S'):
+            
+            salir = True
+    return movimientos
+
+# Tarea 1. Crear laberinto 
+muro = ((0,1), (0,2), (0,3), (0,4), (1,1), (2,1), (2,3), (3,3), (4,0), (4,1), (4,2), (4,3))
+maxFilCol = 5
+laberinto = creaLaberinto(muro, maxFilCol)
+pprint.pprint(laberinto)
